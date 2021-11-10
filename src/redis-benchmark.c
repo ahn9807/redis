@@ -873,6 +873,8 @@ static void showLatencyReport(void) {
     const float p50 = hdr_value_at_percentile(config.latency_histogram, 50.0 )/1000.0f;
     const float p95 = hdr_value_at_percentile(config.latency_histogram, 95.0 )/1000.0f;
     const float p99 = hdr_value_at_percentile(config.latency_histogram, 99.0 )/1000.0f;
+    const float p99_9 = hdr_value_at_percentile(config.latency_histogram, 99.9 )/1000.0f;
+    const float p99_99 = hdr_value_at_percentile(config.latency_histogram, 99.99 )/1000.0f;
     const float p100 = ((float) hdr_max(config.latency_histogram))/1000.0f;
     const float avg = hdr_mean(config.latency_histogram)/1000.0f;
 
@@ -949,10 +951,10 @@ static void showLatencyReport(void) {
         printf("Summary:\n");
         printf("  throughput summary: %.2f requests per second\n", reqpersec);
         printf("  latency summary (msec):\n");
-        printf("    %9s %9s %9s %9s %9s %9s\n", "avg", "min", "p50", "p95", "p99", "max");
-        printf("    %9.3f %9.3f %9.3f %9.3f %9.3f %9.3f\n", avg, p0, p50, p95, p99, p100);
+        printf("    %9s %9s %9s %9s %9s %9s %9s %9s\n", "avg", "min", "p50", "p95", "p99", "p99_9", "p99_99", "max");
+        printf("    %9.3f %9.3f %9.3f %9.3f %9.3f %9.3f %9.3f %9.3f\n", avg, p0, p50, p95, p99, p99_9, p99_99, p100);
     } else if (config.csv) {
-        printf("\"%s\",\"%.2f\",\"%.3f\",\"%.3f\",\"%.3f\",\"%.3f\",\"%.3f\",\"%.3f\"\n", config.title, reqpersec, avg, p0, p50, p95, p99, p100);
+        printf("\"%s\",\"%.2f\",\"%.3f\",\"%.3f\",\"%.3f\",\"%.3f\",\"%.3f\",\"%.3f\", \"%.3f\", \"%.3f\"\n", config.title, reqpersec, avg, p0, p50, p95, p99, p99_9, p99_99, p100);
     } else {
         printf("%*s\r", config.last_printed_bytes, " "); // ensure there is a clean line
         printf("%s: %.2f requests per second, p50=%.3f msec\n", config.title, reqpersec, p50);
